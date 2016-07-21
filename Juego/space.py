@@ -7,11 +7,13 @@ import pygame
 pygame.init()#inicializacion de los modulos de ygame
 sonido1 = pygame.mixer.Sound("shoot.wav")
 sonido2 = pygame.mixer.Sound("son1.wav")
+sonido3 = pygame.mixer.Sound("music1.ogg")
 ventana = turtle.Screen()
 ventana.bgcolor("black")
-ventana.title("space Invadeers")
+ventana.title("Juego")
 ventana.bgpic("Stars.gif")
 #registro de imagenes
+turtle.register_shape("image3.gif")
 turtle.register_shape("image2.gif")
 turtle.register_shape("image1.gif")
 turtle.register_shape("bullet.gif")
@@ -80,6 +82,20 @@ disparo.hideturtle()
 velocidad_disparo = 20
 #estado del disparo
 estado_disparo = "listo" 
+
+#creacion del disparo2
+disparo2 = turtle.Turtle()
+disparo2.color("yellow")
+disparo2.shape("image3.gif")
+disparo2.penup()
+disparo2.speed(0)
+disparo2.setheading(90)
+disparo2.shapesize(0.5 , 0.5)
+disparo2.hideturtle()
+velocidad_disparo2 = 30
+#estado del disparo
+estado_disparo2 = "listo"
+
 #movimiento de jugador de izquierda a derecha
 def mover_izquierda():
 	x= jugador.xcor()
@@ -106,15 +122,15 @@ def disparo_1():
 		disparo.showturtle()
 
 def disparo_2():
-	sonido1.play()
-	global estado_disparo
-	if estado_disparo == "listo":
-		estado_disparo = "fuego"
+	#sonido1.play()
+	global estado_disparo2
+	if estado_disparo2 == "listo":
+		estado_disparo2 = "fuego"
 		#movimiento dela bala con el jugador
-		x = jugador.xcor()
-		y = jugador.ycor() - 10
-		disparo.setposition(x,y)
-		disparo.showturtle()
+		x = enemigo.xcor()
+		y = enemigo.ycor() + 10
+		disparo2.setposition(x,y)
+		disparo2.showturtle()
 def colision (t1,t2):
 	distancia = math.sqrt(math.pow(t1.xcor()-t2.xcor(),2)+math.pow(t1.ycor()-t2.ycor(),2))
 	if distancia < 30:
@@ -128,7 +144,11 @@ turtle.onkey(mover_izquierda,"Left")
 turtle.onkey(mover_derecha,"Right")
 turtle.onkey(disparo_1,"space")
 Salir = True
+alazar=0
+sonido3.play()
 while Salir==True:
+	alazar +=1
+
 	for enemigo in enemigos : 
 		#movimiento de enemigo
 		x = enemigo.xcor()
@@ -145,6 +165,26 @@ while Salir==True:
 			y-= 40
 			enemigo_velocidad *= -1
 			enemigo.sety(y)
+		#disparo alazar
+		if alazar%10==0:
+			disparo_2()
+			estado_disparo2="fuego"
+			if estado_disparo2 == "fuego":
+				y = disparo2.ycor()
+				y -= velocidad_disparo2
+				disparo2.sety(y)
+	
+			#chequeo de la bala hacia el tope
+			if disparo2.ycor() <-300 :
+				disparo2.hideturtle()
+				estado_disparo2 = "listo"
+			#chequeo de colision
+			if colision(disparo2,jugador):
+				Salir=False
+				sonido2.play()
+				puntajestring = "GAME OVER"
+				puntaje.clear()
+				puntaje.write(puntajestring,False,align = "left", font= ("Arial",14,"normal"))
 
 		#chequeo de colision
 		if colision(disparo,enemigo):
