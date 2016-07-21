@@ -3,14 +3,15 @@ import os
 import math
 import random
 import pygame
+fps = pygame.time.Clock()
 #creacion de la pantalla de juego
-pygame.init()#inicializacion de los modulos de ygame
+pygame.init()#inicializacion de los modulos de pygame
 sonido1 = pygame.mixer.Sound("shoot.wav")
 sonido2 = pygame.mixer.Sound("son1.wav")
 sonido3 = pygame.mixer.Sound("music1.ogg")
 ventana = turtle.Screen()
 ventana.bgcolor("black")
-ventana.title("Juego")
+ventana.title("SPACEFIGHTER")
 ventana.bgpic("Stars.gif")
 #registro de imagenes
 turtle.register_shape("image3.gif")
@@ -49,10 +50,10 @@ jugador.speed(0)
 jugador.setposition(0,-250)
 jugador.setheading(90)
 
-velocidad_jugador = 15
+velocidad_jugador = 25
 
 #numero de enemigos
-numero_de_enemigos = 5
+numero_de_enemigos = 7
 #creacion de lista de enemigos
 enemigos = []
 #añaden a la lista los enemigos
@@ -68,8 +69,7 @@ for enemigo in enemigos:
 	x= random.randint(-200,200)
 	y = random.randint(100,250)
 	enemigo.setposition(x,y)
-enemigo_velocidad = 5
-
+enemigo_velocidad = 10
 #creacion del disparo
 disparo = turtle.Turtle()
 disparo.color("yellow")
@@ -79,10 +79,9 @@ disparo.speed(0)
 disparo.setheading(90)
 disparo.shapesize(0.5 , 0.5)
 disparo.hideturtle()
-velocidad_disparo = 20
+velocidad_disparo = 50
 #estado del disparo
 estado_disparo = "listo" 
-
 #creacion del disparo2
 disparo2 = turtle.Turtle()
 disparo2.color("yellow")
@@ -110,6 +109,21 @@ def mover_derecha():
 	if x>280:
 		x=280
 	jugador.setx(x)
+
+def mover_arriba():
+	y= jugador.ycor()
+	y += velocidad_jugador
+	if y>280:
+		y=280
+	jugador.sety(y)
+	
+def mover_abajo():
+	y= jugador.ycor()
+	y -= velocidad_jugador
+	if y<-280:
+		y=-280
+	jugador.sety(y)
+
 def disparo_1():
 	sonido1.play()
 	global estado_disparo
@@ -142,6 +156,8 @@ def colision (t1,t2):
 turtle.listen()
 turtle.onkey(mover_izquierda,"Left")
 turtle.onkey(mover_derecha,"Right")
+turtle.onkey(mover_arriba,"Up")
+turtle.onkey(mover_abajo,"Down")
 turtle.onkey(disparo_1,"space")
 Salir = True
 alazar=0
@@ -223,7 +239,7 @@ while Salir==True:
 		disparo.hideturtle()
 		estado_disparo = "listo"
 	
-	if marcador==100:
+	if marcador==200:
 		Salir=False
 		puntajestring = "VERY GOO, GOOD JOB "
 		puntaje.clear()
