@@ -3,15 +3,15 @@ import os
 import math
 import random
 import pygame
-fps = pygame.time.Clock()
-#creacion de la pantalla de juego
-pygame.init()#inicializacion de los modulos de pygame
+
+pygame.init()#inicializacion de los modulos de ygame
 sonido1 = pygame.mixer.Sound("shoot.wav")
 sonido2 = pygame.mixer.Sound("son1.wav")
 sonido3 = pygame.mixer.Sound("music1.ogg")
+#creacion de la pantalla de juego
 ventana = turtle.Screen()
 ventana.bgcolor("black")
-ventana.title("SPACEFIGHTER")
+ventana.title("Juego")
 ventana.bgpic("Stars.gif")
 #registro de imagenes
 turtle.register_shape("image3.gif")
@@ -43,17 +43,17 @@ puntaje.write(puntajestring,False,align = "left", font= ("Arial",14,"normal"))
 puntaje.hideturtle()
 #creacion del jugador con turtle
 jugador = turtle.Turtle()
-jugador.color("blue")
+#jugador.color("blue")
 jugador.shape("image2.gif")
 jugador.penup()
 jugador.speed(0)
 jugador.setposition(0,-250)
 jugador.setheading(90)
 
-velocidad_jugador = 25
+velocidad_jugador = 15
 
 #numero de enemigos
-numero_de_enemigos = 7
+numero_de_enemigos = 5
 #creacion de lista de enemigos
 enemigos = []
 #añaden a la lista los enemigos
@@ -62,29 +62,31 @@ for i in range (numero_de_enemigos):
 	enemigos.append(turtle.Turtle())
 
 for enemigo in enemigos:
-	enemigo.color("red")
+	#enemigo.color("red")
 	enemigo.shape("image1.gif")
 	enemigo.penup()
 	enemigo.speed(0)
 	x= random.randint(-200,200)
 	y = random.randint(100,250)
 	enemigo.setposition(x,y)
-enemigo_velocidad = 10
+enemigo_velocidad = 5
+
 #creacion del disparo
 disparo = turtle.Turtle()
-disparo.color("yellow")
+#disparo.color("yellow")
 disparo.shape("bullet.gif")
 disparo.penup()
 disparo.speed(0)
 disparo.setheading(90)
 disparo.shapesize(0.5 , 0.5)
 disparo.hideturtle()
-velocidad_disparo = 50
+velocidad_disparo = 20
 #estado del disparo
 estado_disparo = "listo" 
+
 #creacion del disparo2
 disparo2 = turtle.Turtle()
-disparo2.color("yellow")
+#disparo2.color("yellow")
 disparo2.shape("image3.gif")
 disparo2.penup()
 disparo2.speed(0)
@@ -109,21 +111,6 @@ def mover_derecha():
 	if x>280:
 		x=280
 	jugador.setx(x)
-
-def mover_arriba():
-	y= jugador.ycor()
-	y += velocidad_jugador
-	if y>280:
-		y=280
-	jugador.sety(y)
-	
-def mover_abajo():
-	y= jugador.ycor()
-	y -= velocidad_jugador
-	if y<-280:
-		y=-280
-	jugador.sety(y)
-
 def disparo_1():
 	sonido1.play()
 	global estado_disparo
@@ -156,8 +143,6 @@ def colision (t1,t2):
 turtle.listen()
 turtle.onkey(mover_izquierda,"Left")
 turtle.onkey(mover_derecha,"Right")
-turtle.onkey(mover_arriba,"Up")
-turtle.onkey(mover_abajo,"Down")
 turtle.onkey(disparo_1,"space")
 Salir = True
 alazar=0
@@ -239,15 +224,11 @@ while Salir==True:
 		disparo.hideturtle()
 		estado_disparo = "listo"
 	
-	if marcador==200:
+	if marcador==100:
 		Salir=False
-		puntajestring = "VERY GOO, GOOD JOB "
+		puntajestring = "VERY GOOD, GOOD JOB "
 		puntaje.clear()
 		puntaje.write(puntajestring,False,align = "left", font= ("Arial",14,"normal"))
 
-
-
-
-
-
-ventana.mainloop	()
+sonido3.stop()
+ventana.mainloop()

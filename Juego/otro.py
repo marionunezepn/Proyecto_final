@@ -1,14 +1,20 @@
 import pygame
 import random
+class disparoC(pygame.sprite.Sprite):
+	def __init__(self,imagen):
+		self.imagen=imagen
+		self.rect=self.imagen.get_rect()
+		self.rect.top,self.rect.left=(100,200)
+	def mover(self,vx,vy):
+		self.rect.move_ip(vx,vy)
+	def update(self,superficie):
+		superficie.blit(self.imagen,self.rect)
 class player(pygame.sprite.Sprite):
 	def __init__(self,imagen):
 		self.imagen=imagen
 		self.rect=self.imagen.get_rect()
 		self.rect.top,self.rect.left=(100,200)
-	def disparo(self,imagen):
-		self.imagen=imagen
-		self.rect=self.imagen.get_rect()
-		self.rect.top,self.rect.left=(player1.pos())
+	
 
 	def mover(self,vx,vy):
 		self.rect.move_ip(vx,vy)
@@ -31,6 +37,8 @@ def main(): #menu principal
 	sprite1.rect=imagen2.get_rect()
 	sprite1.rect.top = player1.rect.top
 	sprite1.rect.left = player1.rect.left
+	a= player1.rect.top
+	b = player1.rect.left
 	vx,vy=0,0
 	velocidad=10
 	disparo=1;
@@ -57,16 +65,13 @@ def main(): #menu principal
 				if event.key == pygame.K_DOWN:
 					vy=0
 				if event.key == pygame.K_SPACE:
-					disparo=0
+					bullet=disparoC(imagen2)
+					pygame.display.update()
 
 		reloj1.tick(20) 	
 		player1.mover(vx,vy)
 		pantalla.fill((0,0,0))#pintar de color blanco
-		pantalla.blit(imagenfondo,(0,0))	
-		#pantalla.blit(imagen2,(player1.pos())
-		if(disparo==0):
-			pantalla.blit(sprite1.image,(player1.rect.top,player1.rect.left))
-			disparo=1
+		pantalla.blit(imagenfondo,(0,0))
 		player1.update(pantalla)
 		pygame.display.update()
 	
